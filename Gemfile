@@ -13,7 +13,10 @@ gem "pg", "~> 1.1"
 gem "puma", "~> 5.0"
 
 gem 'devise'
+gem 'devise-jwt'
 gem 'jwt'
+
+gem 'heartbeat_rails'
 
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 # gem "jbuilder"
