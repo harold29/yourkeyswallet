@@ -10,10 +10,62 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_11_12_081823) do
+ActiveRecord::Schema[7.0].define(version: 2022_11_13_045238) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
+
+  create_table "currencies", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "name"
+    t.string "symbol"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "geolocations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "latitude"
+    t.string "longitude"
+    t.uuid "location_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["location_id"], name: "index_geolocations_on_location_id"
+  end
+
+  create_table "locations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "address_1"
+    t.string "address_2"
+    t.string "country"
+    t.string "country_code"
+    t.string "state"
+    t.string "state_code"
+    t.integer "zipcode"
+    t.uuid "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_locations_on_user_id"
+  end
+
+  create_table "transaction_types", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "transaction_type"
+    t.string "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "transactions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "user_id", null: false
+    t.uuid "transaction_type_id", null: false
+    t.uuid "requester_wallet"
+    t.uuid "destination_wallet"
+    t.uuid "destination_user"
+    t.decimal "transaction_amount"
+    t.string "operation"
+    t.string "transaction_state"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["transaction_type_id"], name: "index_transactions_on_transaction_type_id"
+    t.index ["user_id"], name: "index_transactions_on_user_id"
+  end
 
   create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "email", default: "", null: false
@@ -32,4 +84,24 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_12_081823) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  create_table "wallets", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "user_id", null: false
+    t.uuid "currency_id", null: false
+    t.string "wallet_key"
+    t.boolean "available"
+    t.decimal "amount"
+    t.string "currency_name"
+    t.string "symbol"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["currency_id"], name: "index_wallets_on_currency_id"
+    t.index ["user_id"], name: "index_wallets_on_user_id"
+  end
+
+  add_foreign_key "geolocations", "locations"
+  add_foreign_key "locations", "users"
+  add_foreign_key "transactions", "transaction_types"
+  add_foreign_key "transactions", "users"
+  add_foreign_key "wallets", "currencies"
+  add_foreign_key "wallets", "users"
 end
