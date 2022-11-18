@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_11_13_054925) do
+ActiveRecord::Schema[7.0].define(version: 2022_11_18_025501) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -53,6 +53,20 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_13_054925) do
     t.index ["user_id"], name: "index_locations_on_user_id"
   end
 
+  create_table "profiles", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "first_name"
+    t.string "last_name"
+    t.string "email"
+    t.string "phone_number_1"
+    t.string "phone_number_2"
+    t.string "gender"
+    t.datetime "birthday"
+    t.uuid "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_profiles_on_user_id"
+  end
+
   create_table "transaction_types", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "transaction_type"
     t.string "description"
@@ -81,11 +95,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_13_054925) do
     t.string "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.string "first_name"
-    t.string "last_name"
-    t.string "phone_number_1"
-    t.string "phone_number_2"
-    t.string "gender"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["email"], name: "index_users_on_email", unique: true
@@ -108,6 +117,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_13_054925) do
 
   add_foreign_key "geolocations", "locations"
   add_foreign_key "locations", "users"
+  add_foreign_key "profiles", "users"
   add_foreign_key "transactions", "transaction_types"
   add_foreign_key "transactions", "users"
   add_foreign_key "wallets", "currencies"

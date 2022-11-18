@@ -4,6 +4,7 @@ RUN apt-get update -qq && apt-get install -y nodejs postgresql-client
 WORKDIR /yourkeyswallet
 COPY Gemfile /yourkeyswallet/Gemfile
 COPY Gemfile.lock /yourkeyswallet/Gemfile.lock
+RUN bundle config --global
 RUN bundle install
 
 # Add a script to be executed every time the container starts.
