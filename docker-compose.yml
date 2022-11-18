@@ -26,6 +26,25 @@ services:
     depends_on:
       - db
 
+  rspec:
+    build: .
+    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rake spec"
+    container_name: your_keys_wallet_rspec
+    hostname: ykw_rspec
+    environment:
+      - RAILS_ENV=test
+      - POSTGRES_DB=${POSTGRES_DB:-wallet-test}
+      - POSTGRES_USER=${POSTGRES_USER:-wallet-test}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-wallet-test}
+    networks:
+      - ykw_network
+    volumes:
+      - .:/yourkeyswallet
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+
 volumes:
   db:
 

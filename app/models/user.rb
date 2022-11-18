@@ -12,4 +12,6 @@ class User < ApplicationRecord
   has_many :wallets
   has_many :transactions
   has_one :location
-end
+  has_one :profile
+
+  end

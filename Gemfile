@@ -16,7 +16,7 @@ gem 'devise'
 gem 'devise-jwt'
 gem 'jwt'
 
-gem 'heartbeat_rails'
+gem 'fast_jsonapi'
 
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 # gem "jbuilder"
@@ -48,6 +48,12 @@ group :development, :test do
   gem 'rspec-rails'
   gem 'pry-byebug'
   gem 'dotenv-rails'
+  gem 'factory_bot_rails'
+  gem 'ffaker'
+end
+
+group :test do
+  gem 'simplecov', require: false
 end
 
 group :development do
