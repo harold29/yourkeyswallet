@@ -23,6 +23,10 @@ default: &default
   username: postgres
   password: wallet-test
   host: db
+  # Local DB
+  # username: wallet_test
+  # password: wallet_test
+  # host: db
 
 development:
   <<: *default
