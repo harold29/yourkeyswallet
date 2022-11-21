@@ -38,6 +38,9 @@ class DeviseCreateUsers < ActiveRecord::Migration[7.0]
       # t.string :phone_number_2
       # t.string :gender
       # t.datetime :birthday
+      t.boolean :deleted, default: false
+      t.boolean :banned, default: false
+      t.boolean :available, default: true
 
       t.timestamps null: false
     end

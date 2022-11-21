@@ -5,6 +5,7 @@ class CreateWallets < ActiveRecord::Migration[7.0]
       t.belongs_to :currency, null: false, foreign_key: true, type: :uuid
       t.string :wallet_key
       t.boolean :available
+      t.boolean :delete
       t.decimal :amount
       t.string :currency_name
       t.string :symbol
