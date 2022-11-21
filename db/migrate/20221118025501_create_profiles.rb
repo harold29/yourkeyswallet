@@ -7,6 +7,8 @@ class CreateProfiles < ActiveRecord::Migration[7.0]
       t.string :phone_number_1
       t.string :phone_number_2
       t.string :gender
+      t.boolean :available, default: true
+      t.boolean :deleted, default: false
       t.datetime :birthday
       t.belongs_to :user, null: false, foreign_key: true, type: :uuid
 

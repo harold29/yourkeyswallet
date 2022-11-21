@@ -7,7 +7,7 @@ RSpec.describe ProfilesController, type: :routing do
     end
 
     it "routes to #show" do
-      expect(get: "/profiles/1").to route_to("profiles#show", id: "1")
+      expect(get: "/profile").to route_to("profiles#show")
     end
 
 
@@ -16,11 +16,11 @@ RSpec.describe ProfilesController, type: :routing do
     end
 
     it "routes to #update via PUT" do
-      expect(put: "/profiles/1").to route_to("profiles#update", id: "1")
+      expect(put: "/profiles/").to route_to("profiles#update")
     end
 
     it "routes to #update via PATCH" do
-      expect(patch: "/profiles/1").to route_to("profiles#update", id: "1")
+      expect(patch: "/profiles/").to route_to("profiles#update")
     end
 
     it "routes to #destroy" do

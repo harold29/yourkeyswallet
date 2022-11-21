@@ -1,5 +1,8 @@
 Rails.application.routes.draw do
-  resources :profiles
+  resources :profiles, except: [:update, :show]
+  get 'profile', to: 'profiles#show'
+  patch 'profiles', to: 'profiles#update'
+  put 'profiles', to: 'profiles#update'
   get 'current_user/index'
   get 'ping', to: 'heartbeat#index'
   resources :transactions
