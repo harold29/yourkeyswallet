@@ -41,13 +41,13 @@ RSpec.describe "/profiles", type: :request do
 
         parsed_response = JSON.parse(body)
 
-        expect(parsed_response['first_name']).to eq(profile.first_name)
-        expect(parsed_response['last_name']).to eq(profile.last_name)
-        expect(parsed_response['email']).to eq(profile.email)
-        expect(parsed_response['phone_number_1']).to eq(profile.phone_number_1)
-        expect(parsed_response['phone_number_2']).to eq(profile.phone_number_2)
-        expect(parsed_response['gender']).to eq(profile.gender)
-        expect(parsed_response['birthday']).to eq(profile.birthday.strftime("%Y-%m-%d"))
+        expect(parsed_response['profile']['first_name']).to eq(profile.first_name)
+        expect(parsed_response['profile']['last_name']).to eq(profile.last_name)
+        expect(parsed_response['profile']['email']).to eq(profile.email)
+        expect(parsed_response['profile']['phone_number_1']).to eq(profile.phone_number_1)
+        expect(parsed_response['profile']['phone_number_2']).to eq(profile.phone_number_2)
+        expect(parsed_response['profile']['gender']).to eq(profile.gender)
+        expect(parsed_response['profile']['birthday']).to eq(profile.birthday.strftime("%Y-%m-%d"))
       end
     end
 
@@ -818,15 +818,6 @@ RSpec.describe "/profiles", type: :request do
         expect(response).to have_http_status(:unauthorized)
         expect(response.content_type).to match(a_string_including("application/json"))
       end
-    end
-  end
-
-  describe "DELETE /destroy" do
-    it "destroys the requested profile" do
-      profile = Profile.create! valid_attributes
-      expect {
-        delete profile_url(profile), headers: valid_headers, as: :json
-      }.to change(Profile, :count).by(-1)
     end
   end
 end
