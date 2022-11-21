@@ -112,4 +112,46 @@ RSpec.describe Profile, type: :model do
       expect(profile2.errors.full_messages.to_sentence).to eq("Phone number 1 has already been taken")
     end
   end
+
+  describe 'methods' do
+    context '#make_available' do
+      let(:profile) { create :profile }
+
+      it 'sets available to true' do
+        profile.make_available
+
+        expect(profile.available).to eq(true)
+      end
+    end
+
+    context '#make_unavailable' do
+      let(:profile) { create :profile }
+
+      it 'sets available to true' do
+        profile.make_unavailable
+
+        expect(profile.available).to eq(false)
+      end
+    end
+
+    context '#make_soft_delete' do
+      let(:profile) { create :profile }
+
+      it 'sets deleted to true' do
+        profile.make_soft_delete
+
+        expect(profile.deleted).to eq(true)
+      end
+    end
+
+    context '#make_soft_undelete' do
+      let(:profile) { create :profile }
+
+      it 'sets deleted to true' do
+        profile.make_soft_undelete
+
+        expect(profile.deleted).to eq(false)
+      end
+    end
+  end
 end

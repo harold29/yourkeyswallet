@@ -20,4 +20,24 @@ class Profile < ApplicationRecord
   validates :first_name, presence: true
   validates :last_name, presence: true
 
+
+  def make_available
+    self.available = true
+    save
+  end
+  
+  def make_unavailable
+    self.available = false
+    save
+  end
+
+  def make_soft_delete
+    self.deleted = true
+    save
+  end
+
+  def make_soft_undelete
+    self.deleted = false
+    save
+  end
 end
