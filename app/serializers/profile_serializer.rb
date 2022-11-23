@@ -4,9 +4,10 @@ class ProfileSerializer < ApplicationSerializer
              :email,
              :phone_number_1,
              :phone_number_2,
-             :gender
+             :gender,
+             :birthday
 
-  attribute :birthday do |object|
+  def birthday
     object.birthday.blank? ? '' : object.birthday.strftime("%Y-%m-%d")
   end
 end

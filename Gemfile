@@ -16,7 +16,7 @@ gem 'devise'
 gem 'devise-jwt'
 gem 'jwt'
 
-gem 'fast_jsonapi'
+gem 'active_model_serializers'
 
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 # gem "jbuilder"

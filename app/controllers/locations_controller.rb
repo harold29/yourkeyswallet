@@ -1,51 +1,50 @@
 class LocationsController < ApplicationController
-  before_action :set_location, only: %i[ show update destroy ]
+  before_action :authenticate_user!
+  before_action :set_location, only: %i[ show ]
 
-  # GET /locations
-  def index
-    @locations = Location.all
 
-    render json: @locations
-  end
-
-  # GET /locations/1
+  # GET /location
   def show
-    render json: @location
+    # render json: @location
+    if current_user
+      if @location
+        render json: {
+          location: LocationSerializer.new(@location).serializable_hash
+        }
+      else
+        render :json, status: :not_found
+      end
+    else
+      render :json, status: :unauthorized
+    end
+    
   end
 
   # POST /locations
   def create
-    @location = Location.new(location_params)
+    if current_user
+      @location = LocationHandler.run(location_params, current_user)
 
-    if @location.save
-      render json: @location, status: :created, location: @location
+      if @location.errors.blank?
+        render json: {
+          location: LocationSerializer.new(@location).serializable_hash
+        }, status: :created
+      else
+        render json: @location.errors, status: :unprocessable_entity
+      end
     else
-      render json: @location.errors, status: :unprocessable_entity
+      render :json, status: :unauthorized
     end
-  end
-
-  # PATCH/PUT /locations/1
-  def update
-    if @location.update(location_params)
-      render json: @location
-    else
-      render json: @location.errors, status: :unprocessable_entity
-    end
-  end
-
-  # DELETE /locations/1
-  def destroy
-    @location.destroy
   end
 
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_location
-      @location = Location.find(params[:id])
+      @location = Location.find_by_user_id(current_user.id)
     end
 
     # Only allow a list of trusted parameters through.
     def location_params
-      params.require(:location).permit(:address_1, :address_2, :country, :country_code, :state, :state_code, :zipcode, :user_id)
+      params.require(:location).permit(:address_1, :address_2, :country, :country_code, :state, :state_code, :zipcode, :user_id, geolocation: [:latitude, :longitude])
     end
 end

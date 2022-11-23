@@ -13,7 +13,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
         code: 200,
         message: 'Signed up successfully.'
       },
-      data: UserSerializer.new(resource).serializable_hash[:data][:attributes]
+      data: resource
     }
   end
 
