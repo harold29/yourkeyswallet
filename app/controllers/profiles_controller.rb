@@ -6,9 +6,8 @@ class ProfilesController < ApplicationController
   def show
     if current_user
       if @profile
-        # render json: ProfileSerializer.new(@profile).serializable_hash[:data][:attributes]
         render json: {
-          profile: ProfileSerializer.new(@profile).serializable_hash[:data][:attributes]
+          profile: ProfileSerializer.new(@profile).serializable_hash
         }
       else
         render :json, status: :ok
@@ -24,9 +23,8 @@ class ProfilesController < ApplicationController
       @profile = ProfileFactory.run(profile_params, current_user)
 
       if @profile.errors.blank?
-        # render json: ProfileSerializer.new(@profile).serializable_hash[:data][:attributes], status: :created
         render json: {
-          profile: ProfileSerializer.new(@profile).serializable_hash[:data][:attributes]
+          profile: ProfileSerializer.new(@profile).serializable_hash
         }, status: :created
       else
         render json: @profile.errors, status: :unprocessable_entity
@@ -42,9 +40,8 @@ class ProfilesController < ApplicationController
       @profile = ProfileFactory.run(profile_params, current_user)
 
       if @profile && @profile.errors.blank?
-        # render json: ProfileSerializer.new(@profile).serializable_hash[:data][:attributes]
         render json: {
-          profile: ProfileSerializer.new(@profile).serializable_hash[:data][:attributes]
+          profile: ProfileSerializer.new(@profile).serializable_hash
         }
       else
         render json: @profile&.errors, status: :unprocessable_entity

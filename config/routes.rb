@@ -6,12 +6,15 @@ Rails.application.routes.draw do
   put 'profiles', to: 'profiles#update'
   patch 'profiles', to: 'profiles#update'
 
+  get 'location', to: 'locations#show'
+  post 'locations', to: 'locations#create'
+
 
   get 'current_user/index'
   get 'ping', to: 'heartbeat#index'
   resources :transactions
   resources :wallets
-  resources :locations
+  # resources :locations
   resources :currencies
   resources :transaction_types
   devise_for :users, path: '/users', path_names: {
