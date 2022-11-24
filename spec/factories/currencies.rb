@@ -1,6 +1,7 @@
 FactoryBot.define do
   factory :currency do
-    name { FFaker::Geolocation.lat }
-    symbol { FFaker::Geolocation.lng }
+    name { FFaker::Currency.name }
+    code { FFaker::Currency.code }
+    symbol { FFaker::Currency.symbol }
   end
 end
