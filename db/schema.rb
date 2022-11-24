@@ -17,6 +17,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_18_025501) do
 
   create_table "currencies", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name"
+    t.string "code"
     t.string "symbol"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -60,6 +61,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_18_025501) do
     t.string "phone_number_1"
     t.string "phone_number_2"
     t.string "gender"
+    t.boolean "available", default: true
+    t.boolean "deleted", default: false
     t.datetime "birthday"
     t.uuid "user_id", null: false
     t.datetime "created_at", null: false
@@ -68,7 +71,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_18_025501) do
   end
 
   create_table "transaction_types", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.string "transaction_type"
+    t.string "name"
     t.string "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -95,6 +98,9 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_18_025501) do
     t.string "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
+    t.boolean "deleted", default: false
+    t.boolean "banned", default: false
+    t.boolean "available", default: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["email"], name: "index_users_on_email", unique: true
@@ -106,6 +112,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_18_025501) do
     t.uuid "currency_id", null: false
     t.string "wallet_key"
     t.boolean "available"
+    t.boolean "delete"
     t.decimal "amount"
     t.string "currency_name"
     t.string "symbol"

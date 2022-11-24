@@ -28,7 +28,7 @@ services:
 
   rspec:
     build: .
-    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rake spec"
+    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rspec"
     container_name: your_keys_wallet_rspec
     hostname: ykw_rspec
     environment:
@@ -41,7 +41,7 @@ services:
     volumes:
       - .:/yourkeyswallet
     ports:
-      - "3000:3000"
+      - "3001:3001"
     depends_on:
       - db
 

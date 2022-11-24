@@ -1,51 +1,70 @@
 class ProfilesController < ApplicationController
-  before_action :set_profile, only: %i[ show update destroy ]
+  before_action :authenticate_user!
+  before_action :set_profile, only: %i[ show ]
 
-  # GET /profiles
-  def index
-    @profiles = Profile.all
-
-    render json: @profiles
-  end
-
-  # GET /profiles/1
+  # GET /profile/
   def show
-    render json: @profile
+    if current_user
+      if @profile
+        render json: {
+          profile: ProfileSerializer.new(@profile).serializable_hash
+        }
+      else
+        render :json, status: :ok
+      end
+    else
+      render :json, status: :unauthorized
+    end
   end
 
   # POST /profiles
   def create
-    @profile = Profile.new(profile_params)
+    if current_user
+      @profile = ProfileFactory.run(profile_params, current_user)
 
-    if @profile.save
-      render json: @profile, status: :created, location: @profile
+      if @profile.errors.blank?
+        render json: {
+          profile: ProfileSerializer.new(@profile).serializable_hash
+        }, status: :created
+      else
+        render json: @profile.errors, status: :unprocessable_entity
+      end
     else
-      render json: @profile.errors, status: :unprocessable_entity
+      render :json, status: :unauthorized
     end
   end
 
-  # PATCH/PUT /profiles/1
+  # PATCH/PUT /profiles/
   def update
-    if @profile.update(profile_params)
-      render json: @profile
-    else
-      render json: @profile.errors, status: :unprocessable_entity
-    end
-  end
+    if current_user
+      @profile = ProfileFactory.run(profile_params, current_user)
 
-  # DELETE /profiles/1
-  def destroy
-    @profile.destroy
+      if @profile && @profile.errors.blank?
+        render json: {
+          profile: ProfileSerializer.new(@profile).serializable_hash
+        }
+      else
+        render json: @profile&.errors, status: :unprocessable_entity
+      end
+    else
+      render :json, status: :unauthorized
+    end
   end
 
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_profile
-      @profile = Profile.find(params[:id])
+      @profile = Profile.find_by_user_id(current_user.id)
     end
 
     # Only allow a list of trusted parameters through.
     def profile_params
-      params.require(:profile).permit(:first_name, :last_name, :email, :phone_number_1, :gender, :birthday, :user_id)
+      params.require(:profile).permit(:first_name, :last_name, :phone_number_1, :phone_number_2, :gender, :birthday)
+    end
+
+    def with_error_handler(&block)
+      begin
+        block&.call
+      end
     end
 end

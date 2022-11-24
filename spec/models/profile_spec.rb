@@ -4,7 +4,7 @@ RSpec.describe Profile, type: :model do
   let(:user) { create :user }
 
   describe 'Profile with all params' do
-    let(:profile) { build :profile, first_name: 'Test1', last_name: 'Test2', email: 'test@test.com', phone_number_1: "005879823492", user: user }
+    let(:profile) { build :profile, first_name: 'Test1', last_name: 'Test2', email: 'test@test.com', phone_number_1: "005879823492", phone_number_2: '005491122222222', birthday: DateTime.parse('2022-01-31'), gender: "test", user: user }
 
     it 'Save Profile' do
       expect(profile.save).to eq(true)
@@ -23,7 +23,7 @@ RSpec.describe Profile, type: :model do
 
   describe 'Profile with missing params' do
     context 'Profile with missing first name' do
-      let(:profile) { build :profile, first_name: nil, last_name: 'Test2', email: 'test@test.com', phone_number_1: "005879823492", user: user}
+      let(:profile) { build :profile, first_name: nil, last_name: 'Test2', email: 'test@test.com', phone_number_1: "005879823492", phone_number_2: '005491122222222', birthday: DateTime.parse('2022-01-31'), gender: "test", user: user}
 
       it "Profile is not saved and return error" do
         result = profile.save
@@ -35,7 +35,7 @@ RSpec.describe Profile, type: :model do
     end
 
     context 'Profile with missing last name' do
-      let(:profile) { build :profile, first_name: "Test1", last_name: nil, email: 'test@test.com', phone_number_1: "005879823492", user: user }
+      let(:profile) { build :profile, first_name: "Test1", last_name: nil, email: 'test@test.com', phone_number_1: "005879823492", phone_number_2: '005491122222222', birthday: DateTime.parse('2022-01-31'), gender: "test", user: user }
 
       it "Profile is not saved and return error" do
         result = profile.save
@@ -47,7 +47,7 @@ RSpec.describe Profile, type: :model do
     end
 
     context 'Profile with missing email' do
-      let(:profile) { build :profile, first_name: "Test1", last_name: 'Test2', email: nil, phone_number_1: "005879823492", user: user }
+      let(:profile) { build :profile, first_name: "Test1", last_name: 'Test2', email: nil, phone_number_1: "005879823492", phone_number_2: '005491122222222', birthday: DateTime.parse('2022-01-31'), gender: "test", user: user }
 
       it "Profile is not saved and return error" do
         result = profile.save
@@ -59,14 +59,14 @@ RSpec.describe Profile, type: :model do
     end
 
     context 'Profile with missing phone_number_1' do
-      let(:profile) { build :profile, first_name: "Test1", last_name: 'Test2', email: 'test@test.com', phone_number_1: '', user: user }
+      let(:profile) { build :profile, first_name: "Test1", last_name: 'Test2', email: 'test@test.com', phone_number_1: '', phone_number_2: '005491122222222', birthday: DateTime.parse('2022-01-31'), gender: "test", user: user }
 
       it "Profile is not saved and return error" do
         result = profile.save
 
         expect(result).to eq(false)
         expect(profile.errors).to_not eq(nil)
-        expect(profile.errors.full_messages.to_sentence).to eq("Phone number 1 can't be blank, Phone number 1 is not a number, and Phone number 1 is too short (minimum is 10 characters)")
+        expect(profile.errors.full_messages.to_sentence).to eq("Phone number 1 can't be blank and Phone number 1 is too short (minimum is 10 characters)")
       end
     end
   end
@@ -110,6 +110,48 @@ RSpec.describe Profile, type: :model do
       profile2.save
 
       expect(profile2.errors.full_messages.to_sentence).to eq("Phone number 1 has already been taken")
+    end
+  end
+
+  describe 'methods' do
+    context '#make_available' do
+      let(:profile) { create :profile }
+
+      it 'sets available to true' do
+        profile.make_available
+
+        expect(profile.available).to eq(true)
+      end
+    end
+
+    context '#make_unavailable' do
+      let(:profile) { create :profile }
+
+      it 'sets available to true' do
+        profile.make_unavailable
+
+        expect(profile.available).to eq(false)
+      end
+    end
+
+    context '#make_soft_delete' do
+      let(:profile) { create :profile }
+
+      it 'sets deleted to true' do
+        profile.make_soft_delete
+
+        expect(profile.deleted).to eq(true)
+      end
+    end
+
+    context '#make_soft_undelete' do
+      let(:profile) { create :profile }
+
+      it 'sets deleted to true' do
+        profile.make_soft_undelete
+
+        expect(profile.deleted).to eq(false)
+      end
     end
   end
 end
