@@ -18,6 +18,11 @@ gem 'jwt'
 
 gem 'active_model_serializers'
 
+gem "lockbox"
+
+gem 'eventmachine'
+gem 'bitcoin-ruby'
+
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 # gem "jbuilder"
 
