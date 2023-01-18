@@ -7,7 +7,8 @@ RSpec.describe Currency, type: :model do
         build :currency,
           name: 'US Dolar',
           code: 'USD',
-          symbol: '$'
+          symbol: '$',
+          currency_kind: 'us_dollar'
       end
 
       it 'save currency' do
@@ -22,6 +23,7 @@ RSpec.describe Currency, type: :model do
         expect(last_currency.name).to eq(currency.name)
         expect(last_currency.code).to eq(currency.code)
         expect(last_currency.symbol).to eq(currency.symbol)
+        expect(last_currency.currency_kind).to eq(currency.currency_kind)
       end
     end
 
@@ -91,7 +93,8 @@ RSpec.describe Currency, type: :model do
         {
           name: 'US Dollar',
           code: 'USD',
-          symbol: '$'
+          symbol: '$',
+          currency_kind: 'us_dollar'
         }
       end
 
@@ -100,6 +103,7 @@ RSpec.describe Currency, type: :model do
         expect(currency.name).to eq(params[:name])
         expect(currency.code).to eq(params[:code])
         expect(currency.symbol).to eq(params[:symbol])
+        expect(currency.currency_kind).to eq(params[:currency_kind])
       end
     end
 
@@ -122,6 +126,16 @@ RSpec.describe Currency, type: :model do
             expect(currency.save).to eq(false)
             expect(currency.errors).to_not eq(nil)
             expect(currency.errors.full_messages.to_sentence).to eq("Code can't be blank")
+          end
+        end
+
+        describe 'with missing currency_kind' do
+          it 'does not update currency' do
+            currency.currency_kind = nil
+
+            expect(currency.save).to eq(false)
+            expect(currency.errors).to_not eq(nil)
+            expect(currency.errors.full_messages.to_sentence).to eq("Currency kind can't be blank")
           end
         end
 

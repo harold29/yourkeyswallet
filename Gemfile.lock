@@ -72,6 +72,10 @@ GEM
       minitest (>= 5.1)
       tzinfo (~> 2.0)
     bcrypt (3.1.18)
+    bitcoin-ruby (0.0.20)
+      eventmachine
+      ffi
+      scrypt
     bootsnap (1.13.0)
       msgpack (~> 1.2)
     builder (3.2.4)
@@ -110,12 +114,17 @@ GEM
       concurrent-ruby (~> 1.0)
       zeitwerk (~> 2.6)
     erubi (1.11.0)
+    eventmachine (1.2.7)
     factory_bot (6.2.1)
       activesupport (>= 5.0.0)
     factory_bot_rails (6.2.0)
       factory_bot (~> 6.2.0)
       railties (>= 5.0.0)
     ffaker (2.21.0)
+    ffi (1.15.5)
+    ffi-compiler (1.0.1)
+      ffi (>= 1.0.0)
+      rake
     globalid (1.0.0)
       activesupport (>= 5.0)
     i18n (1.12.0)
@@ -125,6 +134,7 @@ GEM
       reline (>= 0.3.0)
     jsonapi-renderer (0.2.2)
     jwt (2.5.0)
+    lockbox (1.1.0)
     loofah (2.19.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
@@ -211,6 +221,8 @@ GEM
       rspec-mocks (~> 3.11)
       rspec-support (~> 3.11)
     rspec-support (3.12.0)
+    scrypt (3.0.7)
+      ffi-compiler (>= 1.0, < 2.0)
     simplecov (0.21.2)
       docile (~> 1.1)
       simplecov-html (~> 0.11)
@@ -239,14 +251,17 @@ PLATFORMS
 
 DEPENDENCIES
   active_model_serializers
+  bitcoin-ruby
   bootsnap
   debug
   devise
   devise-jwt
   dotenv-rails
+  eventmachine
   factory_bot_rails
   ffaker
   jwt
+  lockbox
   pg (~> 1.1)
   pry-byebug
   puma (~> 5.0)
