@@ -1,41 +1,69 @@
 class CurrenciesController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_currency, only: %i[ show update destroy ]
 
   # GET /currencies
   def index
-    @currencies = Currency.all
+    with_authenticated_user do
+      @currencies = Currency.all
 
-    render json: @currencies
+      render json: @currencies, each_serializer: CurrencySerializer
+    end
   end
 
   # GET /currencies/1
   def show
-    render json: @currency
+    with_authenticated_user do
+      if @currency
+        render json: CurrencySerializer.new(@currency).serializable_hash
+      else
+        render :json, status: :not_found
+      end
+    end
   end
 
   # POST /currencies
   def create
-    @currency = Currency.new(currency_params)
+    with_authenticated_user do
+      @currency = Currency.new(currency_params)
 
-    if @currency.save
-      render json: @currency, status: :created, location: @currency
-    else
-      render json: @currency.errors, status: :unprocessable_entity
+      if @currency.save
+        render json: {
+          currency: CurrencySerializer.new(@currency).serializable_hash
+        }, status: :created
+      else
+        render json: @currency.errors, status: :unprocessable_entity
+      end
     end
   end
 
   # PATCH/PUT /currencies/1
   def update
-    if @currency.update(currency_params)
-      render json: @currency
-    else
-      render json: @currency.errors, status: :unprocessable_entity
+    with_authenticated_user do
+      if @currency
+        if @currency.update(currency_params)
+          # render json: CurrencySerializer.new(@currency).serializable_hash
+          render json: {
+            currency: CurrencySerializer.new(@currency).serializable_hash
+          }
+        else
+          render json: @currency.errors, status: :unprocessable_entity
+        end
+      else
+        render :json, status: :not_found
+      end
     end
   end
 
   # DELETE /currencies/1
   def destroy
-    @currency.destroy
+    with_authenticated_user do
+      if @currency
+        @currency.destroy
+      else
+        render :json, status: :not_found
+      end
+    end
   end
 
   private
@@ -46,6 +74,16 @@ class CurrenciesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def currency_params
-      params.require(:currency).permit(:name, :symbol)
+      params.require(:currency).permit(:name, :code, :symbol)
+    end
+
+    def with_authenticated_user(&block)
+      begin
+        if current_user
+          block.call
+        else
+          render :json, status: :unauthorized
+        end
+      end
     end
 end

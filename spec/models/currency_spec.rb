@@ -40,7 +40,7 @@ RSpec.describe Currency, type: :model do
           it 'currency is not saved and return error' do
             expect(currency.save).to eq(false)
             expect(currency.errors).to_not eq(nil)
-            expect(currency.errors.full_messages.to_sentence).to eq("Name can't be blank")
+            expect(currency.errors.full_messages.to_sentence).to eq("Name can't be blank and Currency kind can't be blank")
           end
         end
 
@@ -115,7 +115,7 @@ RSpec.describe Currency, type: :model do
 
             expect(currency.save).to eq(false)
             expect(currency.errors).to_not eq(nil)
-            expect(currency.errors.full_messages.to_sentence).to eq("Name can't be blank")
+            expect(currency.errors.full_messages.to_sentence).to eq("Name can't be blank and Currency kind can't be blank")
           end
         end
 
@@ -131,11 +131,12 @@ RSpec.describe Currency, type: :model do
 
         describe 'with missing currency_kind' do
           it 'does not update currency' do
+            currency.name = nil
             currency.currency_kind = nil
 
             expect(currency.save).to eq(false)
             expect(currency.errors).to_not eq(nil)
-            expect(currency.errors.full_messages.to_sentence).to eq("Currency kind can't be blank")
+            expect(currency.errors.full_messages.to_sentence).to eq("Name can't be blank and Currency kind can't be blank")
           end
         end
 
