@@ -54,7 +54,7 @@ RSpec.describe "/currencies", type: :request do
 
   describe 'POST /create' do
     context 'with_valid_params' do
-      let(:user) { create :user }
+      let(:user) { create :admin }
       let(:auth_headers) { Devise::JWT::TestHelpers.auth_headers({}, user) }
       let(:valid_attributes) { { name: "US Dollar", code: "USD", symbol: '$' } }
 
@@ -82,7 +82,7 @@ RSpec.describe "/currencies", type: :request do
 
     context 'with invalid params' do
       describe 'with missing params' do
-        let(:user) { create :user }
+        let(:user) { create :admin }
         let(:auth_headers) { Devise::JWT::TestHelpers.auth_headers({}, user) }
         let(:invalid_attributes) { { code: "USD", symbol: '$' } }
 
@@ -103,7 +103,7 @@ RSpec.describe "/currencies", type: :request do
       end
 
       describe 'with malformed attributes' do
-        let(:user) { create :user }
+        let(:user) { create :admin }
         let(:auth_headers) { Devise::JWT::TestHelpers.auth_headers({}, user) }
         let(:invalid_attributes) { { name: 'US Dollar', test: "USD" , symbol: '$' } }
 
@@ -127,7 +127,7 @@ RSpec.describe "/currencies", type: :request do
 
   describe 'PATCH /update' do
     context 'with_valid_params' do
-      let(:user) { create :user }
+      let(:user) { create :admin }
       let(:currency) { create :currency }
       let(:auth_headers) { Devise::JWT::TestHelpers.auth_headers({}, user) }
       let(:valid_attributes) { { name: "US Dollar", code: "USD", symbol: '$' } }
@@ -155,7 +155,7 @@ RSpec.describe "/currencies", type: :request do
 
     context 'with different params' do
       describe 'with missing params' do
-        let(:user) { create :user }
+        let(:user) { create :admin }
         let(:currency) { create :currency }
         let(:auth_headers) { Devise::JWT::TestHelpers.auth_headers({}, user) }
         let(:invalid_attributes) { { code: "USD", symbol: '$' } }
@@ -180,7 +180,7 @@ RSpec.describe "/currencies", type: :request do
       end
 
       describe 'with malformed attributes' do
-        let(:user) { create :user }
+        let(:user) { create :admin }
         let(:currency) { create :currency }
         let(:auth_headers) { Devise::JWT::TestHelpers.auth_headers({}, user) }
         let(:invalid_attributes) { { name: 'US Dollar', test: "USD" , symbol: '$' } }
@@ -207,7 +207,7 @@ RSpec.describe "/currencies", type: :request do
   end
 
   describe 'DELETE /destroy' do
-    let(:user) { create :user }
+    let(:user) { create :admin }
     let(:currency) { create :currency }
     let(:auth_headers) { Devise::JWT::TestHelpers.auth_headers({}, user) }
     let(:destroy_attribute) { { id: currency.id } }

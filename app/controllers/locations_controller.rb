@@ -8,6 +8,9 @@ class LocationsController < ApplicationController
     # render json: @location
     if current_user
       if @location
+        
+        authorize @location
+
         render json: {
           location: LocationSerializer.new(@location).serializable_hash
         }
@@ -24,6 +27,8 @@ class LocationsController < ApplicationController
   def create
     if current_user
       @location = LocationHandler.run(location_params, current_user)
+
+      authorize @location
 
       if @location.errors.blank?
         render json: {
