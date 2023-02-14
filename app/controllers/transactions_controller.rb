@@ -3,14 +3,30 @@ class TransactionsController < ApplicationController
 
   # GET /transactions
   def index
-    @transactions = Transaction.all
+    if current_user
+      @transactions = Transaction.find_all_by_user_id(current_user.id)
 
-    render json: @transactions
+      authorize @transactions
+
+      render json: @transactions
+    else
+      render :json, status: :unauthorized
+    end
   end
 
   # GET /transactions/1
   def show
-    render json: @transaction
+    if current_user
+      if @transaction
+        authorize @transaction
+
+        render json: @transaction
+      else
+        render :json, status: :not_found
+      end
+    else
+      render :json, status: :unauthorized
+    end
   end
 
   # POST /transactions
@@ -34,14 +50,14 @@ class TransactionsController < ApplicationController
   end
 
   # DELETE /transactions/1
-  def destroy
-    @transaction.destroy
-  end
+  # def destroy
+  #   @transaction.destroy
+  # end
 
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_transaction
-      @transaction = Transaction.find(params[:id])
+      @transaction = Transaction.where("id=? AND user_id=?", params[:id], current_user.id).first
     end
 
     # Only allow a list of trusted parameters through.

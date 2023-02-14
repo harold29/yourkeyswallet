@@ -7,6 +7,8 @@ class CurrenciesController < ApplicationController
     with_authenticated_user do
       @currencies = Currency.all
 
+      authorize @currencies
+
       render json: @currencies, each_serializer: CurrencySerializer
     end
   end
@@ -15,6 +17,8 @@ class CurrenciesController < ApplicationController
   def show
     with_authenticated_user do
       if @currency
+        authorize @currency
+
         render json: CurrencySerializer.new(@currency).serializable_hash
       else
         render :json, status: :not_found
@@ -26,6 +30,8 @@ class CurrenciesController < ApplicationController
   def create
     with_authenticated_user do
       @currency = Currency.new(currency_params)
+
+      authorize @currency
 
       if @currency.save
         render json: {
@@ -41,6 +47,9 @@ class CurrenciesController < ApplicationController
   def update
     with_authenticated_user do
       if @currency
+
+        authorize @currency
+        
         if @currency.update(currency_params)
           # render json: CurrencySerializer.new(@currency).serializable_hash
           render json: {
@@ -59,6 +68,9 @@ class CurrenciesController < ApplicationController
   def destroy
     with_authenticated_user do
       if @currency
+        
+        authorize @currency
+
         @currency.destroy
       else
         render :json, status: :not_found

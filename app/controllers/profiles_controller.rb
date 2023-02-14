@@ -5,7 +5,10 @@ class ProfilesController < ApplicationController
   # GET /profile/
   def show
     if current_user
+
       if @profile
+        authorize @profile
+
         render json: {
           profile: ProfileSerializer.new(@profile).serializable_hash
         }
@@ -21,6 +24,8 @@ class ProfilesController < ApplicationController
   def create
     if current_user
       @profile = ProfileFactory.run(profile_params, current_user)
+
+      authorize @profile
 
       if @profile.errors.blank?
         render json: {

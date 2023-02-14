@@ -7,6 +7,8 @@ class WalletsController < ApplicationController
     if current_user
       @wallets = Wallet.find_all_by_user(current_user.id)
 
+      authorize @wallets
+
       render json: @wallets
     else
       render :json, status: :unauthorized
@@ -15,8 +17,10 @@ class WalletsController < ApplicationController
 
   # GET /wallets/1
   def show
-    if current_user
+    if current_user      
       if @wallet
+        authorize @wallet
+
         render json: WalletSerializer.new(@wallet).serializable_hash
       else
         render :json, status: :not_found
@@ -31,6 +35,7 @@ class WalletsController < ApplicationController
     if current_user
       with_error_handler do
         @wallet = WalletBuilder.run(current_user, wallet_params[:currency_kind])
+        authorize @wallet
 
         if @wallet.save
           render json: WalletSerializer.new(@wallet).serializable_hash, status: :created
@@ -47,6 +52,8 @@ class WalletsController < ApplicationController
   def destroy
     if current_user
       if @wallet
+        authorize @wallet
+
         @wallet.destroy
       else
         render :json, status: :not_found
