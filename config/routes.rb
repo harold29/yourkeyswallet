@@ -13,7 +13,7 @@ Rails.application.routes.draw do
   resources :transactions
   resources :wallets
   # resources :locations
-  # resources :currencies
+  resources :currencies
   # resources :transaction_types
   devise_for :users, path: '/users', path_names: {
     sign_in: 'login',

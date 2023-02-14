@@ -71,6 +71,8 @@ class ProfileFactory
   end
 
   def update_profile
+    Pundit.policy(current_user, profile)
+
     result = profile.update(update_attributes)
     
     if result

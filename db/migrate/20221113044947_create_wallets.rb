@@ -3,12 +3,11 @@ class CreateWallets < ActiveRecord::Migration[7.0]
     create_table :wallets, id: :uuid do |t|
       t.belongs_to :user, null: false, foreign_key: true, type: :uuid
       t.belongs_to :currency, null: false, foreign_key: true, type: :uuid
-      t.string :wallet_skey
-      t.string :wallet_pkey
-      t.boolean :available
-      t.boolean :delete
+      t.boolean :available, default: true
+      t.boolean :deleted, default: false
       t.decimal :amount
-      t.string :currency_name
+      t.string :address, presence: true
+      t.string :currency_name, presence: true
       t.string :symbol
 
       t.timestamps

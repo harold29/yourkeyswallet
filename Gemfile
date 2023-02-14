@@ -15,8 +15,14 @@ gem "puma", "~> 5.0"
 gem 'devise'
 gem 'devise-jwt'
 gem 'jwt'
+gem 'pundit'
 
 gem 'active_model_serializers'
+
+gem "lockbox"
+
+gem 'eventmachine'
+gem 'bitcoin-ruby'
 
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 # gem "jbuilder"

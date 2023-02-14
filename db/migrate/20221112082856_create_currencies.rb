@@ -4,6 +4,7 @@ class CreateCurrencies < ActiveRecord::Migration[7.0]
       t.string :name
       t.string :code
       t.string :symbol
+      t.string :currency_kind
 
       t.timestamps
     end

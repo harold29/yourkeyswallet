@@ -29,3 +29,7 @@ TransactionType.create!([{
   name: 'Money Transfer',
   description: 'Wallet 1 moves money to Wallet 2'
 }])
+
+# binding.pry
+User.create!(email: 'potato@potato.com', password: '12345678')
+Wallet.create!(user_id: User.last.id, currency_id: Currency.last.id, pubkey: '12345')
